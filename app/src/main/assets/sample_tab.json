@@ -1,0 +1,23 @@
+{
+  "title": "Смех — Я бегу туда же (demo bass)",
+  "bpm": 160,
+  "tuning": ["E", "A", "D", "G"],
+  "notes": [
+    {"timeMs": 0,    "string": 3, "fret": 4, "durationMs": 180},
+    {"timeMs": 180,  "string": 3, "fret": 4, "durationMs": 180},
+    {"timeMs": 360,  "string": 3, "fret": 4, "durationMs": 180},
+    {"timeMs": 540,  "string": 3, "fret": 4, "durationMs": 180},
+    {"timeMs": 720,  "string": 4, "fret": 5, "durationMs": 180},
+    {"timeMs": 900,  "string": 4, "fret": 5, "durationMs": 180},
+    {"timeMs": 1080, "string": 4, "fret": 5, "durationMs": 180},
+    {"timeMs": 1260, "string": 4, "fret": 5, "durationMs": 180},
+    {"timeMs": 1440, "string": 3, "fret": 2, "durationMs": 180},
+    {"timeMs": 1620, "string": 3, "fret": 2, "durationMs": 180},
+    {"timeMs": 1800, "string": 3, "fret": 2, "durationMs": 180},
+    {"timeMs": 1980, "string": 3, "fret": 2, "durationMs": 180},
+    {"timeMs": 2160, "string": 3, "fret": 4, "durationMs": 180},
+    {"timeMs": 2340, "string": 3, "fret": 4, "durationMs": 180},
+    {"timeMs": 2520, "string": 3, "fret": 4, "durationMs": 180},
+    {"timeMs": 2700, "string": 3, "fret": 4, "durationMs": 180}
+  ]
+}
