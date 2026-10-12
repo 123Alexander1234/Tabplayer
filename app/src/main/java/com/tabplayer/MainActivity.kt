@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -184,7 +185,7 @@ fun PlayerScreen(videoIdToLoad: String?, onOpenSearch: () -> Unit) {
         ActivityResultContracts.OpenDocument()
     ) { uri: Uri? -> uri?.let { player.load(it) } }
 
-    Column(Modifier.fillMaxSize().padding(16.dp)) {
+    Column(Modifier.fillMaxSize().background(Color(0xFF13151A)).padding(all = 16.dp)) {
         Text(
             track?.title ?: "Нет трека",
             fontSize = 24.sp,
@@ -287,7 +288,7 @@ fun PlayerScreenPreview() {
                 TabNote(900, 4, 3, 180)
             )
         )
-        Column(Modifier.fillMaxSize().padding(16.dp)) {
+        Column(Modifier.fillMaxSize().background(Color(0xFF13151A)).padding(all = 16.dp)) {
             Text(
                 sampleTrack.title,
                 fontSize = 24.sp,

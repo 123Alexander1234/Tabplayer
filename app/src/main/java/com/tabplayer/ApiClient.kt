@@ -11,7 +11,7 @@ import java.net.URLEncoder
 import java.util.concurrent.TimeUnit
 
 object ApiClient {
-    private const val SERVER_URL = "https://tabplayer-server.example.com"
+    private const val SERVER_URL = "https://tabplayer-e29cf.containers.snapdeploy.app"
 
     private val client = OkHttpClient.Builder()
         .connectTimeout(60, TimeUnit.SECONDS)
