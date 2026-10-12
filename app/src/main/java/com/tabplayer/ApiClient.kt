@@ -46,7 +46,7 @@ object ApiClient {
      * Запускает разбор трека по video_id (с YouTube).
      * Возвращает табы.
      */
-    suspend fun transcribeByVideoId(videoId: String): TabTrack = withContext(Dispatchers.IO) {
+    suspend fun transcribeByTrackId(videoId: String): TabTrack = withContext(Dispatchers.IO) {
         val body = "{\"video_id\":\"$videoId\"}".toRequestBody("application/json".toMediaType())
         val request = Request.Builder()
             .url("$SERVER_URL/transcribe_url")

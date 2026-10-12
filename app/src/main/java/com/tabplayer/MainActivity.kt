@@ -27,7 +27,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.material3.SliderDefaults
 
 class MainActivity : ComponentActivity() {
@@ -56,7 +55,7 @@ fun AppRoot() {
         )
     } else {
         PlayerScreen(
-            videoIdToLoad = selectedVideoId,
+            trackIdToLoad = selectedVideoId,
             onOpenSearch = { screen = "search" }
         )
     }
@@ -140,7 +139,7 @@ fun SearchScreen(onBack: () -> Unit, onSelect: (String) -> Unit) {
 }
 
 @Composable
-fun PlayerScreen(videoIdToLoad: String?, onOpenSearch: () -> Unit) {
+fun PlayerScreen(trackIdToLoad: String?, onOpenSearch: () -> Unit) {
     val context = LocalContext.current
     val player = remember { AudioPlayer(context) }
 
@@ -156,12 +155,12 @@ fun PlayerScreen(videoIdToLoad: String?, onOpenSearch: () -> Unit) {
         track = TabRepository.load(context, "sample_tab.json")
     }
 
-    LaunchedEffect(videoIdToLoad) {
-        if (videoIdToLoad != null) {
+    LaunchedEffect(trackIdToLoad) {
+        if (trackIdToLoad != null) {
             loading = true
             errorText = null
             try {
-                track = ApiClient.transcribeByVideoId(videoIdToLoad)
+                track = ApiClient.transcribeByTrackId(trackIdToLoad)
             } catch (e: Exception) {
                 errorText = e.message
             } finally {
