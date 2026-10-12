@@ -24,14 +24,10 @@ object ApiClient {
 
     private val gson = Gson()
 
-    /**
-     * Поиск треков на YouTube по названию/исполнителю.
-     * Возвращает список результатов (id, название, автор, длительность).
-     */
     suspend fun search(query: String): List<SearchResult> = withContext(Dispatchers.IO) {
         val encoded = URLEncoder.encode(query, "UTF-8")
         val request = Request.Builder()
-            .url("$SERVER_URL/search?q=$encoded")
+            .url("$SERVER_URL/yandex_search?q=$encoded")
             .get()
             .build()
 
@@ -42,14 +38,10 @@ object ApiClient {
         }
     }
 
-    /**
-     * Запускает разбор трека по video_id (с YouTube).
-     * Возвращает табы.
-     */
-    suspend fun transcribeByVideoId(videoId: String): TabTrack = withContext(Dispatchers.IO) {
-        val body = "{\"video_id\":\"$videoId\"}".toRequestBody("application/json".toMediaType())
+    suspend fun transcribeByTrackId(trackId: String): TabTrack = withContext(Dispatchers.IO) {
+        val body = "{\"track_id\":\"$trackId\"}".toRequestBody("application/json".toMediaType())
         val request = Request.Builder()
-            .url("$SERVER_URL/transcribe_url")
+            .url("$SERVER_URL/yandex_transcribe")
             .post(body)
             .build()
 
@@ -60,10 +52,6 @@ object ApiClient {
         }
     }
 
-    /**
-     * Отправляет локальный аудиофайл (MP3/WAV) на сервер для разбора.
-     * Возвращает табы.
-     */
     suspend fun transcribeFile(context: Context, uri: Uri): TabTrack = withContext(Dispatchers.IO) {
         val inputStream = context.contentResolver.openInputStream(uri)
             ?: error("Не удалось открыть файл")
