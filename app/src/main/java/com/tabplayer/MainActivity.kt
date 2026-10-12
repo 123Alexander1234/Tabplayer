@@ -183,41 +183,23 @@ fun PlayerScreen(videoIdToLoad: String?, onOpenSearch: () -> Unit) {
 
     val picker = rememberLauncherForActivityResult(
         ActivityResultContracts.OpenDocument()
-    ) { uri: Uri? -> uri?.let { player.load(it) } }
-
-    Column(Modifier.fillMaxSize().background(Color(0xFF13151A)).padding(all = 16.dp)) {
-        Text(
-            track?.title ?: "Нет трека",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFFE5E7EB)
-        )
-        Spacer(Modifier.height(4.dp))
-        track?.let {
-            Text(
-                "Строй: ${it.tuning.joinToString(" ")}  •  BPM: ${it.bpm}",
-                fontSize = 12.sp,
-                color = Color(0xFF6B7280)
-            )
-        }
-
-        Spacer(Modifier.height(12.dp))
-
-        Box(Modifier.weight(1f)) {
-            track?.let { TabCanvas(it, pos, Modifier.fillMaxSize()) }
-            if (loading) {
-                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        CircularProgressIndicator(color = Color(0xFFF59E0B))
-                        Spacer(Modifier.height(12.dp))
-                        Text("Разбираем трек...")
-                    }
+    ) { uri: Uri? ->
+        uri?.let {
+            player.load(it)
+            loading = true
+            errorText = null
+            scope.launch {
+                try {
+                    val newTrack = ApiClient.transcribeFile(context, it)
+                    track = newTrack
+                } catch (e: Exception) {
+                    errorText = e.message ?: "Ошибка загрузки"
+                } finally {
+                    loading = false
                 }
             }
-            errorText?.let { err ->
-                Text(err, color = Color.Red, modifier = Modifier.align(Alignment.BottomCenter))
-            }
         }
+    }
 
         Spacer(Modifier.height(12.dp))
             Slider(
@@ -269,7 +251,7 @@ fun PlayerScreen(videoIdToLoad: String?, onOpenSearch: () -> Unit) {
                 Icon(Icons.Default.Search, contentDescription = "Поиск")
             }
         }
-        }
+
     }
 
 @Preview(showBackground = true, widthDp = 400, heightDp = 800)

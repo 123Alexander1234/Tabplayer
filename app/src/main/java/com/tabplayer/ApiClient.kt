@@ -1,9 +1,12 @@
 package com.tabplayer
 
+import android.content.Context
+import android.net.Uri
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -16,17 +19,22 @@ object ApiClient {
     private val client = OkHttpClient.Builder()
         .connectTimeout(60, TimeUnit.SECONDS)
         .readTimeout(300, TimeUnit.SECONDS)
-        .writeTimeout(60, TimeUnit.SECONDS)
+        .writeTimeout(300, TimeUnit.SECONDS)
         .build()
 
     private val gson = Gson()
 
+    /**
+     * Поиск треков на YouTube по названию/исполнителю.
+     * Возвращает список результатов (id, название, автор, длительность).
+     */
     suspend fun search(query: String): List<SearchResult> = withContext(Dispatchers.IO) {
         val encoded = URLEncoder.encode(query, "UTF-8")
         val request = Request.Builder()
             .url("$SERVER_URL/search?q=$encoded")
             .get()
             .build()
+
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) return@withContext emptyList()
             val text = response.body?.string() ?: return@withContext emptyList()
@@ -34,12 +42,45 @@ object ApiClient {
         }
     }
 
+    /**
+     * Запускает разбор трека по video_id (с YouTube).
+     * Возвращает табы.
+     */
     suspend fun transcribeByVideoId(videoId: String): TabTrack = withContext(Dispatchers.IO) {
         val body = "{\"video_id\":\"$videoId\"}".toRequestBody("application/json".toMediaType())
         val request = Request.Builder()
             .url("$SERVER_URL/transcribe_url")
             .post(body)
             .build()
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) error("Ошибка сервера: ${response.code}")
+            val text = response.body?.string() ?: error("Пустой ответ")
+            gson.fromJson(text, TabTrack::class.java)
+        }
+    }
+
+    /**
+     * Отправляет локальный аудиофайл (MP3/WAV) на сервер для разбора.
+     * Возвращает табы.
+     */
+    suspend fun transcribeFile(context: Context, uri: Uri): TabTrack = withContext(Dispatchers.IO) {
+        val inputStream = context.contentResolver.openInputStream(uri)
+            ?: error("Не удалось открыть файл")
+        val bytes = inputStream.readBytes()
+        inputStream.close()
+
+        val requestBody = bytes.toRequestBody("audio/mpeg".toMediaType())
+        val multipart = MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart("audio", "track.mp3", requestBody)
+            .build()
+
+        val request = Request.Builder()
+            .url("$SERVER_URL/transcribe")
+            .post(multipart)
+            .build()
+
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) error("Ошибка сервера: ${response.code}")
             val text = response.body?.string() ?: error("Пустой ответ")
