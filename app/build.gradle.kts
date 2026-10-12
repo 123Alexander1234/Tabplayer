@@ -30,4 +30,5 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.media3:media3-exoplayer:1.3.1")
     implementation("com.google.code.gson:gson:2.11.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 }
