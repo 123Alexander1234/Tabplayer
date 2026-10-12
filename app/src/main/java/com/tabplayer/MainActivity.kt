@@ -20,6 +20,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.material3.SliderDefaults
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -103,7 +111,7 @@ fun SearchScreen(onBack: () -> Unit, onSelect: (String) -> Unit) {
 
         if (loading) {
             Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(color = Color(0xFFFF4081))
+                CircularProgressIndicator(color = Color(0xFFF59E0B))
             }
         }
 
@@ -177,10 +185,21 @@ fun PlayerScreen(videoIdToLoad: String?, onOpenSearch: () -> Unit) {
     ) { uri: Uri? -> uri?.let { player.load(it) } }
 
     Column(Modifier.fillMaxSize().padding(16.dp)) {
-        Text(track?.title ?: "Нет трека", fontSize = 20.sp)
+        Text(
+            track?.title ?: "Нет трека",
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color(0xFFE5E7EB)
+        )
+        Spacer(Modifier.height(4.dp))
         track?.let {
-            Text("Строй: ${it.tuning.joinToString(" ")}  •  BPM: ${it.bpm}", fontSize = 12.sp)
+            Text(
+                "Строй: ${it.tuning.joinToString(" ")}  •  BPM: ${it.bpm}",
+                fontSize = 12.sp,
+                color = Color(0xFF6B7280)
+            )
         }
+
         Spacer(Modifier.height(12.dp))
 
         Box(Modifier.weight(1f)) {
@@ -188,7 +207,7 @@ fun PlayerScreen(videoIdToLoad: String?, onOpenSearch: () -> Unit) {
             if (loading) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        CircularProgressIndicator(color = Color(0xFFFF4081))
+                        CircularProgressIndicator(color = Color(0xFFF59E0B))
                         Spacer(Modifier.height(12.dp))
                         Text("Разбираем трек...")
                     }
@@ -200,21 +219,134 @@ fun PlayerScreen(videoIdToLoad: String?, onOpenSearch: () -> Unit) {
         }
 
         Spacer(Modifier.height(12.dp))
-        Slider(
-            value = pos.toFloat(),
-            onValueChange = { player.seekTo(it.toLong()) },
-            valueRange = 0f..dur.toFloat()
+            Slider(
+                value = pos.toFloat(),
+                onValueChange = { player.seekTo(it.toLong()) },
+                valueRange = 0f..dur.toFloat(),
+                colors = SliderDefaults.colors(
+                    thumbColor = Color(0xFFF59E0B),
+                    activeTrackColor = Color(0xFFF59E0B),
+                    inactiveTrackColor = Color(0xFF2A2E36)
+                )
+
         )
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("${pos / 1000}s / ${dur / 1000}s", fontSize = 12.sp)
-            Spacer(Modifier.width(12.dp))
-            Button(onClick = { if (playing) player.pause() else player.play() }) {
-                Text(if (playing) "Пауза" else "Играть")
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            FilledIconButton(
+                onClick = { picker.launch(arrayOf("audio/*")) },
+                colors = IconButtonDefaults.filledIconButtonColors(
+                    containerColor = Color(0xFF1E2128),
+                    contentColor = Color(0xFF9CA3AF)
+                )
+            ) {
+                Icon(Icons.Default.PlayArrow, contentDescription = "Файл")
             }
-            Spacer(Modifier.width(8.dp))
-            Button(onClick = { picker.launch(arrayOf("audio/*")) }) { Text("Файл") }
-            Spacer(Modifier.width(8.dp))
-            Button(onClick = onOpenSearch) { Text("Поиск") }
+            FilledIconButton(
+                onClick = { if (playing) player.pause() else player.play() },
+                colors = IconButtonDefaults.filledIconButtonColors(
+                    containerColor = Color(0xFFF59E0B),
+                    contentColor = Color(0xFF13151A)
+                ),
+                modifier = Modifier.size(64.dp)
+            ) {
+                Icon(
+                    if (playing) Icons.Default.Pause else Icons.Default.PlayArrow,
+                    contentDescription = "Играть",
+                    modifier = Modifier.size(32.dp)
+                )
+            }
+            FilledIconButton(
+                onClick = onOpenSearch,
+                colors = IconButtonDefaults.filledIconButtonColors(
+                    containerColor = Color(0xFF1E2128),
+                    contentColor = Color(0xFFF59E0B)
+                )
+            ) {
+                Icon(Icons.Default.Search, contentDescription = "Поиск")
+            }
+        }
+        }
+    }
+
+@Preview(showBackground = true, widthDp = 400, heightDp = 800)
+@Composable
+fun PlayerScreenPreview() {
+    MaterialTheme(colorScheme = darkColorScheme()) {
+        val sampleTrack = TabTrack(
+            title = "Смех — Я бегу туда же",
+            bpm = 160,
+            notes = listOf(
+                TabNote(0, 3, 4, 180),
+                TabNote(180, 3, 4, 180),
+                TabNote(360, 3, 5, 180),
+                TabNote(540, 3, 5, 180),
+                TabNote(720, 4, 3, 180),
+                TabNote(900, 4, 3, 180)
+            )
+        )
+        Column(Modifier.fillMaxSize().padding(16.dp)) {
+            Text(
+                sampleTrack.title,
+                fontSize = 24.sp,
+                fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+                color = Color(0xFFFFFFFF)
+            )
+            Spacer(Modifier.height(4.dp))
+            Text(
+                "Строй: ${sampleTrack.tuning.joinToString(" ")}  •  BPM: ${sampleTrack.bpm}",
+                fontSize = 12.sp,
+                color = Color(0xFF888888)
+            )
+            Spacer(Modifier.height(12.dp))
+            TabCanvas(sampleTrack, 500L, Modifier.weight(1f))
+            Spacer(Modifier.height(12.dp))
+            Slider(
+                value = 0.3f,
+                onValueChange = {},
+                valueRange = 0f..1f,
+                colors = SliderDefaults.colors(
+                    thumbColor = Color(0xFFF59E0B),
+                    activeTrackColor = Color(0xFFF59E0B),
+                    inactiveTrackColor = Color(0xFF2A2E36)
+                )
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                FilledIconButton(
+                    onClick = {},
+                    colors = IconButtonDefaults.filledIconButtonColors(
+                        containerColor = Color(0xFF1E2128),
+                        contentColor = Color(0xFF9CA3AF)
+                    )
+                ) {
+                    Icon(Icons.Default.PlayArrow, contentDescription = "Файл")
+                }
+                FilledIconButton(
+                    onClick = {},
+                    colors = IconButtonDefaults.filledIconButtonColors(
+                        containerColor = Color(0xFFF59E0B),
+                        contentColor = Color(0xFF13151A)
+                    ),
+                    modifier = Modifier.size(64.dp)
+                ) {
+                    Icon(Icons.Default.PlayArrow, contentDescription = "Играть", modifier = Modifier.size(32.dp))
+                }
+                FilledIconButton(
+                    onClick = {},
+                    colors = IconButtonDefaults.filledIconButtonColors(
+                        containerColor = Color(0xFF1E2128),
+                        contentColor = Color(0xFFF59E0B)
+                    )
+                ) {
+                    Icon(Icons.Default.Search, contentDescription = "Поиск")
+                }
+            }
         }
     }
 }
