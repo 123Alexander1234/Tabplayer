@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:2:1-16:12
-INJECTED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:2:1-16:12
-INJECTED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:2:1-16:12
-INJECTED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:2:1-16:12
+ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:2:1-17:12
+INJECTED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:2:1-17:12
+INJECTED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:2:1-17:12
+INJECTED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:2:1-17:12
 MERGED from [androidx.compose.material3:material3-android:1.3.0] C:\Users\Makar\.gradle\caches\9.6.0\transforms\440cd4b1c09a150fde9e4598e62118e3\transformed\material3-release\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.compose.material:material-android:1.7.0] C:\Users\Makar\.gradle\caches\9.6.0\transforms\a4cce473124884bdc7bd0e2c47c19783\transformed\material-release\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.compose.material:material-ripple-android:1.7.0] C:\Users\Makar\.gradle\caches\9.6.0\transforms\a563ff6d51c53f01de437183a8a90fd9\transformed\material-ripple-release\AndroidManifest.xml:2:1-7:12
@@ -66,19 +66,23 @@ MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\Makar\.gradle\cache
 		INJECTED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml
 	xmlns:android
 		ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:2:11-69
+uses-permission#android.permission.INTERNET
+ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:3:5-66
+	android:name
+		ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:3:22-64
 uses-permission#android.permission.READ_MEDIA_AUDIO
-ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:3:5-74
+ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:4:5-74
 	android:name
-		ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:3:22-72
+		ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:4:22-72
 uses-permission#android.permission.READ_EXTERNAL_STORAGE
-ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:4:5-5:37
+ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:5:5-6:37
 	android:maxSdkVersion
-		ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:5:9-35
+		ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:6:9-35
 	android:name
-		ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:4:22-77
+		ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:5:22-77
 application
-ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:6:5-15:19
-INJECTED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:6:5-15:19
+ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:7:5-16:19
+INJECTED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:7:5-16:19
 MERGED from [androidx.compose.ui:ui-tooling-android:1.7.0] C:\Users\Makar\.gradle\caches\9.6.0\transforms\f9a0615b42794f23d71595fd106596e8\transformed\ui-tooling-release\AndroidManifest.xml:22:5-26:19
 MERGED from [androidx.compose.ui:ui-tooling-android:1.7.0] C:\Users\Makar\.gradle\caches\9.6.0\transforms\f9a0615b42794f23d71595fd106596e8\transformed\ui-tooling-release\AndroidManifest.xml:22:5-26:19
 MERGED from [androidx.emoji2:emoji2:1.3.0] C:\Users\Makar\.gradle\caches\9.6.0\transforms\d12f48ba155d9795b4a854aedc5580a9\transformed\emoji2-1.3.0\AndroidManifest.xml:23:5-33:19
@@ -98,25 +102,25 @@ MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\Makar\.gradle\cach
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.13.1] C:\Users\Makar\.gradle\caches\9.6.0\transforms\82944746006f1d154d1eb5f563bbf907\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
 	android:label
-		ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:7:9-35
+		ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:8:9-35
 	android:theme
-		ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:8:9-68
+		ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:9:9-68
 activity#com.tabplayer.MainActivity
-ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:9:9-14:20
+ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:10:9-15:20
 	android:exported
-		ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:9:48-71
+		ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:10:48-71
 	android:name
-		ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:9:19-47
+		ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:10:19-47
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:10:13-13:29
+ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:11:13-14:29
 action#android.intent.action.MAIN
-ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:11:17-68
+ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:12:17-68
 	android:name
-		ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:11:25-66
+		ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:12:25-66
 category#android.intent.category.LAUNCHER
-ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:12:17-76
+ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:13:17-76
 	android:name
-		ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:12:27-74
+		ADDED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml:13:27-74
 uses-sdk
 INJECTED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\Makar\StudioProjects\Tabplayer\app\src\main\AndroidManifest.xml
