@@ -4,9 +4,10 @@ RUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-RUN pip install --no-cache-dir fastapi uvicorn python-multipart yt-dlp
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY main.py /app/main.py
+COPY main.py .
 
 EXPOSE 8080
 
