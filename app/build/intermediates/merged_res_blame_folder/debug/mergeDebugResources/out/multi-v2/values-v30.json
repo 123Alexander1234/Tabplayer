@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.tabplayer.app-mergeDebugResources-45:/values-v30/values-v30.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\Makar\\.gradle\\caches\\9.6.0\\transforms\\440cd4b1c09a150fde9e4598e62118e3\\transformed\\material3-release\\res\\values-v30\\values-v30.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "72",
+                        "endOffsets": "123"
+                    }
+                }
+            ]
+        }
+    ]
+}
