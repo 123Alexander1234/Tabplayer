@@ -1,9 +1,13 @@
+import os
+import tempfile
 from fastapi import FastAPI, UploadFile, File, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import tempfile
-import subprocess
-import json
+
+try:
+    from yandex_music import Client as YandexClient
+except ImportError:
+    YandexClient = None
 
 app = FastAPI(title="TabPlayer Server")
 
@@ -14,43 +18,85 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+YANDEX_TOKEN = os.environ.get("YANDEX_TOKEN", "")
 
-class TranscribeRequest(BaseModel):
-    video_id: str
+
+class YandexTranscribeRequest(BaseModel):
+    track_id: str
 
 
 @app.get("/")
 def root():
-    return {"status": "ok", "message": "TabPlayer server is running"}
+    return {
+        "status": "ok",
+        "message": "TabPlayer server is running",
+        "yandex_available": YandexClient is not None,
+        "yandex_token_set": bool(YANDEX_TOKEN)
+    }
 
 
-@app.get("/search")
-def search(q: str = Query(..., min_length=2)):
+@app.get("/yandex_search")
+def yandex_search(q: str = Query(..., min_length=2)):
+    if not YandexClient:
+        return {"results": [], "error": "yandex-music library not installed"}
+    if not YANDEX_TOKEN:
+        return {"results": [], "error": "YANDEX_TOKEN not set"}
     try:
-        result = subprocess.run(
-            ["yt-dlp", f"ytsearch10:{q}", "--dump-json", "--flat-playlist", "--no-warnings"],
-            capture_output=True, text=True, timeout=60
-        )
+        client = YandexClient(YANDEX_TOKEN).init()
+        search_result = client.search(q)
         items = []
-        for line in result.stdout.strip().split("\n"):
-            if not line:
-                continue
-            data = json.loads(line)
-            items.append({
-                "video_id": data.get("id"),
-                "title": data.get("title"),
-                "uploader": data.get("uploader") or data.get("channel"),
-                "duration": data.get("duration"),
-                "thumbnail": data.get("thumbnail")
-            })
+        if search_result.tracks and search_result.tracks.results:
+            for track in search_result.tracks.results[:10]:
+                artists = ", ".join(a.name for a in track.artists) if track.artists else "Unknown"
+                items.append({
+                    "track_id": str(track.id),
+                    "title": track.title,
+                    "artists": artists,
+                    "duration": track.duration_ms or 0
+                })
         return {"results": items}
     except Exception as e:
         return {"results": [], "error": str(e)}
 
 
-@app.post("/transcribe_url")
-async def transcribe_url(req: TranscribeRequest):
-    return make_demo_tabs(f"YouTube: {req.video_id}")
+@app.post("/yandex_transcribe")
+async def yandex_transcribe(req: YandexTranscribeRequest):
+    if not YandexClient:
+        return {"error": "yandex-music library not installed"}
+    if not YANDEX_TOKEN:
+        return {"error": "YANDEX_TOKEN not set"}
+    try:
+        client = YandexClient(YANDEX_TOKEN).init()
+        tracks = client.tracks([req.track_id])
+        if not tracks:
+            return {"error": "Track not found"}
+        track = tracks[0]
+
+        download_info = track.get_download_info()
+        if not download_info:
+            return {"error": "No download info (subscription required?)"}
+
+        # Выбираем лучшее качество
+        best = sorted(
+            download_info,
+            key=lambda d: (d.bitrate_in_kbps or 0),
+            reverse=True
+        )[0]
+        direct_link = best.get_direct_link()
+
+        # Скачиваем файл (пока сохраняем во временный файл)
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as f:
+            response = client.request.get(direct_link)
+            f.write(response.content)
+            saved_path = f.name
+
+        artists = ", ".join(a.name for a in track.artists) if track.artists else ""
+        title = f"{track.title} — {artists}" if artists else track.title
+
+        # TODO: Здесь позже будет Demucs + Basic Pitch
+        return make_demo_tabs(title)
+    except Exception as e:
+        return {"error": str(e)}
 
 
 @app.post("/transcribe")
