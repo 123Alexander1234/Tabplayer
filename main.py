@@ -23,7 +23,6 @@ def root():
 
 @app.get("/search")
 def search(q: str = Query(..., min_length=2)):
-    """Ищет видео на YouTube по запросу и возвращает топ-10."""
     try:
         result = subprocess.run(
             ["yt-dlp", f"ytsearch10:{q}", "--dump-json", "--flat-playlist", "--no-warnings"],
@@ -47,8 +46,6 @@ def search(q: str = Query(..., min_length=2)):
 
 @app.post("/transcribe_url")
 async def transcribe_url(req: TranscribeRequest):
-    """Скачивает аудио по video_id и (пока) возвращает заглушку."""
-    # Здесь позже будет скачивание и Demucs
     return make_demo_tabs(f"YouTube: {req.video_id}")
 
 @app.post("/transcribe")
