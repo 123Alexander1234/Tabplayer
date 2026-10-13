@@ -67,36 +67,43 @@ async def yandex_transcribe(req: YandexTranscribeRequest):
         return {"error": "YANDEX_TOKEN not set"}
     try:
         client = YandexClient(YANDEX_TOKEN).init()
-        tracks = client.tracks([req.track_id])
+        track_id_int = int(req.track_id)
+        tracks = client.tracks([track_id_int])
         if not tracks:
-            return {"error": "Track not found"}
+            return {"error": f"Track {req.track_id} not found"}
         track = tracks[0]
 
         download_info = track.get_download_info()
         if not download_info:
             return {"error": "No download info (subscription required?)"}
 
-        # Выбираем лучшее качество
-        best = sorted(
-            download_info,
-            key=lambda d: (d.bitrate_in_kbps or 0),
-            reverse=True
-        )[0]
+        # Выбираем лучшее качество (устойчиво к разным версиям библиотеки)
+        def bitrate_of(d):
+            return getattr(d, 'bitrate_in_kbps', None) or getattr(d, 'bitrate', 0) or 0
+
+        best = sorted(download_info, key=bitrate_of, reverse=True)[0]
         direct_link = best.get_direct_link()
 
-        # Скачиваем файл (пока сохраняем во временный файл)
+        # Скачиваем файл во временное хранилище
         with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as f:
             response = client.request.get(direct_link)
             f.write(response.content)
             saved_path = f.name
 
+        file_size = os.path.getsize(saved_path)
+
         artists = ", ".join(a.name for a in track.artists) if track.artists else ""
         title = f"{track.title} — {artists}" if artists else track.title
 
         # TODO: Здесь позже будет Demucs + Basic Pitch
-        return make_demo_tabs(title)
+        # Сейчас возвращаем заглушку, но файл уже скачан в saved_path
+        return make_demo_tabs(f"{title} (size={file_size}b)")
     except Exception as e:
-        return {"error": str(e)}
+        import traceback
+        return {
+            "error": f"{type(e).__name__}: {str(e)}",
+            "trace": traceback.format_exc()[-500:]
+        }
 
 
 @app.post("/transcribe")
