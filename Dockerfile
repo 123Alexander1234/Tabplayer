@@ -4,10 +4,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg && rm -r
 
 WORKDIR /app
 
-COPY server/requirements.txt .
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY server/main.py .
+COPY main.py .
 
 EXPOSE 8080
 
