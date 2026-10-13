@@ -3,8 +3,9 @@ package com.tabplayer
 data class SearchResult(
     val track_id: String,
     val title: String,
-    val artists: String,
-    val duration: Int?
+    val artist: String?,
+    val duration: Int?,
+    val thumbnail: String?
 )
 
 data class SearchResponse(

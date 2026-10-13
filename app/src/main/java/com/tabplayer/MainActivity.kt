@@ -123,11 +123,11 @@ fun SearchScreen(onBack: () -> Unit, onSelect: (String) -> Unit) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 4.dp)
-                        .clickable { onSelect(item.video_id) }
+                        .clickable { onSelect(item.track_id) }
                 ) {
                     Column(Modifier.padding(12.dp)) {
                         Text(item.title, fontSize = 16.sp)
-                        item.uploader?.let { Text(it, fontSize = 12.sp, color = Color.Gray) }
+                        item.artist?.let { Text(it, fontSize = 12.sp, color = Color.Gray) }
                         item.duration?.let {
                             Text("${it / 60}:${(it % 60).toString().padStart(2, '0')}", fontSize = 12.sp, color = Color.Gray)
                         }
